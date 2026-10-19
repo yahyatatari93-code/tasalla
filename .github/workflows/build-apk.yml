@@ -1,0 +1,91 @@
+# بناء ملف APK لتطبيق «تسلّى غو» على سيرفرات GitHub
+# بيشتغل لحاله مع كل تعديل على فرع main، أو يدوياً من تبويب Actions ← Run workflow.
+# النتيجة: ملف APK جاهز للتحميل من صفحة Releases (ومن صفحة التشغيل نفسها).
+
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: جلب الكود
+        uses: actions/checkout@v4
+
+      - name: تجهيز Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: تجهيز Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: تجهيز Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: قراءة رقم الإصدار
+        id: ver
+        run: echo "name=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: تنزيل المكتبات
+        run: npm install --no-audit --no-fund
+
+      - name: إنشاء مشروع أندرويد
+        run: npx cap add android
+
+      - name: أيقونة التطبيق وشاشة البداية
+        run: npx capacitor-assets generate --android
+
+      - name: ضبط الإصدار والاتجاه العمودي
+        run: |
+          sed -i "s/versionCode 1$/versionCode ${{ github.run_number }}/" android/app/build.gradle
+          sed -i "s/versionName \"1.0\"/versionName \"${{ steps.ver.outputs.name }}\"/" android/app/build.gradle
+          sed -i 's/android:name=".MainActivity"/android:name=".MainActivity"\n            android:screenOrientation="portrait"/' android/app/src/main/AndroidManifest.xml
+          grep -n "versionCode\|versionName" android/app/build.gradle
+          grep -n "screenOrientation" android/app/src/main/AndroidManifest.xml
+
+      - name: نسخ ملفات التطبيق لمشروع أندرويد
+        run: npx cap sync android
+
+      - name: مفتاح توقيع ثابت (حتى التحديثات تنزل فوق النسخة القديمة)
+        run: |
+          mkdir -p ~/.android
+          cp keystore/debug.keystore ~/.android/debug.keystore
+
+      - name: بناء APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: تسمية الملف
+        run: |
+          mkdir -p out
+          cp android/app/build/outputs/apk/debug/app-debug.apk "out/tasalla-go-v${{ steps.ver.outputs.name }}.apk"
+          ls -la out
+
+      - name: رفع الملف على صفحة التشغيل
+        uses: actions/upload-artifact@v4
+        with:
+          name: tasalla-go-apk
+          path: out/*.apk
+
+      - name: نشر الملف بصفحة Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.name }}-build${{ github.run_number }}
+          name: تسلّى غو ${{ steps.ver.outputs.name }} (بناء ${{ github.run_number }})
+          body: |
+            نزّل ملف APK من تحت، وافتحه على الموبايل.
+            إذا طلب منك: اسمح بتثبيت التطبيقات من هالمصدر.
+          files: out/*.apk
