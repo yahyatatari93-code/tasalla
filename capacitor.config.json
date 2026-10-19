@@ -1,0 +1,19 @@
+{
+  "appId": "com.tasallago.app",
+  "appName": "تسلّى غو",
+  "webDir": "www",
+  "backgroundColor": "#25234F",
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 900,
+      "launchAutoHide": true,
+      "backgroundColor": "#25234F",
+      "showSpinner": false,
+      "androidScaleType": "CENTER_CROP"
+    }
+  }
+}
