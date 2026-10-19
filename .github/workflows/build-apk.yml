@@ -30,9 +30,6 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: تجهيز Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: قراءة رقم الإصدار
         id: ver
         run: echo "name=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
