@@ -1,0 +1,22 @@
+{
+  "name": "tasalla-go",
+  "version": "2.2.0",
+  "private": true,
+  "description": "تسلّى غو: ألعاب سهرات وحكي للشلة والثنائي",
+  "scripts": {
+    "android:add": "cap add android",
+    "android:assets": "capacitor-assets generate --android",
+    "android:sync": "cap sync android",
+    "android:open": "cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "6.2.1",
+    "@capacitor/app": "6.0.3",
+    "@capacitor/core": "6.2.1",
+    "@capacitor/splash-screen": "6.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "3.0.5",
+    "@capacitor/cli": "6.2.1"
+  }
+}
