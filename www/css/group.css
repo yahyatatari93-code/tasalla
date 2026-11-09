@@ -360,3 +360,71 @@
 .big{color:var(--g)}
 .timerrow output{color:var(--ink)}
 @media (max-width:380px){.modes{grid-template-columns:1fr}.seg4 button{font-size:.76rem}.twbox{grid-template-columns:36px 1fr}.twbox .btn{grid-column:1/-1}}
+/* ---------- مين فينا: الحرارة، التصويت السري، الاختيار، الصاعقة ---------- */
+.heatb{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;border-radius:999px;padding:3px 11px;background:var(--bg);color:var(--ink)}
+.heatb.h2{background:color-mix(in srgb,var(--bomb) 14%,var(--surface));color:var(--coral-ink)}
+.heatb.h3{background:color-mix(in srgb,var(--hot) 20%,var(--surface));color:var(--coral-ink)}
+.heatb.blitzb{background:color-mix(in srgb,var(--dare) 18%,var(--surface));color:var(--ink)}
+.bars{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;background:var(--surface);border-radius:var(--bubble-sm);padding:16px;box-shadow:inset 0 0 0 1px var(--line)}
+.bars li{display:grid;grid-template-columns:minmax(64px,30%) 1fr 26px;gap:10px;align-items:center}
+.bars .bn{font-weight:600;overflow-wrap:anywhere}
+.bars .bt{height:14px;border-radius:7px;background:var(--bg);overflow:hidden}
+.bars .bt i{display:block;height:100%;width:var(--w);background:color-mix(in srgb,var(--g) 55%,var(--line));border-radius:7px;animation:growx .9s cubic-bezier(.2,1,.3,1) both;animation-delay:var(--d)}
+.bars li.top .bt i{background:var(--g)}
+.bars li.top .bn{font-family:var(--display);font-weight:800}
+@keyframes growx{from{width:0}}
+.bars b{font-family:var(--display);font-weight:800;text-align:center;font-variant-numeric:tabular-nums}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-self:stretch}
+.choice .btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 8px;font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.35}
+.choice .btn small{font-family:var(--body);font-weight:500;font-size:.76rem;opacity:.85}
+.twc.blitz{background:color-mix(in srgb,var(--dare) 18%,var(--surface));color:var(--ink)}
+.twbanner.blitz{background:color-mix(in srgb,var(--dare) 18%,var(--surface));color:var(--ink)}
+.twbanner.blitz svg,.twc.blitz svg{color:var(--dare)}
+.crwn{font-size:.85rem;letter-spacing:-2px}
+.twbox.flip .ico{color:var(--coral)}
+/* ---------- فكّر متلي + المزاد ---------- */
+:root{--herd:#4DAF62;--auction:#D9822B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--herd:#6CC77F;--auction:#EE9A45}}
+:root[data-theme="dark"]{--herd:#6CC77F;--auction:#EE9A45}
+.herdin{width:100%;border:1.5px solid var(--line);border-radius:16px;padding:14px;font:inherit;font-family:var(--display);font-weight:700;font-size:1.4rem;text-align:center;color:var(--ink);background:var(--bg)}
+.herdcl{display:flex;flex-direction:column;gap:8px}
+.herdcl>button,.herdcl>div{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;text-align:start;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--bubble-sm);padding:12px 14px;animation:pop .35s cubic-bezier(.2,1.4,.4,1) both}
+.herdcl b{font-family:var(--display);font-weight:700;font-size:1.15rem;overflow-wrap:anywhere}
+.herdcl span{grid-column:1;font-size:.78rem;color:var(--muted)}
+.herdcl i{grid-row:1/3;grid-column:2;font-style:normal;font-family:var(--display);font-weight:800;font-size:1.4rem;min-width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--bg)}
+.herdcl>button[aria-pressed=true]{border-color:var(--g);background:var(--gt);box-shadow:0 0 0 3px color-mix(in srgb,var(--g) 25%,transparent)}
+.herdcl .win{border-color:var(--g);background:var(--gt)}
+.herdcl .win i{background:var(--g);color:var(--on-dark)}
+.herdcl .lone{border-style:dashed;border-color:var(--coral)}
+.herdcl .lone i::after{content:"🐑";font-size:1.2rem}
+.herdcl .lone i{font-size:0}
+.sheepline{margin:0;text-align:center;background:var(--surface);border-radius:var(--bubble-sm);padding:10px 14px;box-shadow:inset 0 0 0 1px var(--line);font-size:.92rem}
+.sheep{font-style:normal;font-size:.95rem}
+.stepper{display:flex;align-items:center;gap:16px}
+.stepper .btn{width:58px;height:58px;padding:0;font-size:1.7rem;font-family:var(--display);font-weight:800;border-radius:50%}
+.stepper output{font-family:var(--display);font-weight:800;font-size:4.2rem;line-height:1;min-width:2ch;text-align:center;font-variant-numeric:tabular-nums;color:var(--ink)}
+.aucnum{margin:0;font-size:1.1rem;color:var(--muted)}
+.aucnum b{font-family:var(--display);font-weight:800;font-size:2.6rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.big2{font-size:1.25rem;padding:18px}
+.duelscr .ring5 .r-fg{stroke:var(--g)}
+/* ---------- الكرسي الساخن الجديد + 30 ثانية ---------- */
+:root{--rapid:#B55BD6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--rapid:#C97BE3}}
+:root[data-theme="dark"]{--rapid:#C97BE3}
+.seatprof h2{font-family:var(--display);font-weight:800;font-size:1.5rem;margin:0;line-height:1.35}
+.seg3{display:flex;gap:4px;background:var(--bg);border-radius:14px;padding:4px}
+.seg3 button{flex:1;border:0;background:transparent;border-radius:10px;padding:10px 4px;font-weight:600;color:var(--muted)}
+.seg3 button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px var(--shadow)}
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;width:100%}
+.ladder i{font-style:normal;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px;border-radius:12px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);opacity:.55;transition:all .3s}
+.ladder i b{font-size:1.05rem;line-height:1.2}
+.ladder i span{font-size:.7rem;font-weight:600;color:var(--muted)}
+.ladder i.done{opacity:1;background:color-mix(in srgb,var(--hot) 16%,var(--surface));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--hot) 40%,var(--line))}
+.ladder i.on{opacity:1;background:var(--hot);box-shadow:0 8px 18px -10px var(--hot);transform:translateY(-2px)}
+.ladder i.on span{color:var(--on-dark)}
+.ladder.small{margin:4px 0}
+.seatcard.lv4 .q,.seatcard.lv5 .q{color:var(--coral-ink)}
+.seatcard.lv5{box-shadow:0 0 0 2px var(--hot),0 24px 50px -24px var(--shadow)}
+.seatbtns{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:8px}
+.seatbtns .btn{padding:14px 6px}
+.seatbtns .btn:disabled{opacity:.4}
