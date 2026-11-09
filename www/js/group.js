@@ -1,4 +1,4 @@
-// نسخة الشلة: الإعداد، الألعاب السبعة، نظام النقاط (الإقصاء أو الكلاسيكي) مع المفاجآت، المبارزات، والنهاية
+// نسخة الشلة: الإعداد، الألعاب العشرة، نظام النقاط (الإقصاء أو الكلاسيكي) مع المفاجآت، المبارزات، والنهاية
 const CC=["var(--said)","var(--spy)","var(--lie)","var(--hot)","var(--who)","var(--bomb)","var(--dare)"];
 const DARK_ON={who:1,said:1,dare:1};
 
@@ -10,17 +10,26 @@ const GAMES={
   rule:"قولوا كلمة من الفئة ومرّروا الموبايل للي جنبكم. ما حدا بيعرف إيمتى بتنفجر.",
   pts:["اللي بتنفجر بإيده −1","كل الباقيين +1"]},
  who:{n:"مين فينا؟",s:"أشّر عالعدّ",c:"var(--who)",
-  rule:"منقرأ السؤال، منعدّ للثلاثة، والكل بيأشّر بنفس اللحظة. اللي بياخد أكثر إشارات عنده 20 ثانية يدافع عن حاله.",
-  pts:["دفاع مقنع +2","دفاع مش مقنع −1"]},
+  rule:"منعدّ للثلاثة والكل بيأشّر. اللي بياخد الأغلبية بيختار: يعترف أو يدافع. والأسئلة الجريئة تصويتها سري.",
+  pts:["أشّرت متل الأغلبية +1","المتّهم: اعترف +1 · دافع وأقنع +3 · ما أقنع −2","أشّرت على حالك وطلعت انت +3، وما طلعت −1","🔥 سؤال ناري: نقاط المتّهم دبل"]},
  said:{n:"مين قالها؟",s:"أجوبة بدون أسماء",c:"var(--said)",
   rule:"كل واحد بيكتب جوابه بالسر، ومنقرأ الأجوبة مخلوطة. احزروا مين كاتب كل جواب.",
   pts:["أول واحد بيحزر صح +1","ما حدا عرفك: +2"]},
- hot:{n:"الكرسي الساخن",s:"30 ثانية لكل واحد",c:"var(--hot)",
-  rule:"كل واحد بياخد 30 ثانية على الكرسي: أسئلة سريعة ورا بعض، وممنوع «ما بعرف».",
+ hot:{n:"الكرسي الساخن",s:"لوين بتوصل؟",c:"var(--hot)",
+  rule:"واحد عالكرسي، والأسئلة بتصير أحرج كل ما جاوب: خمس درجات من «تسخين» لـ«جحيم». كل درجة بتخلصها بتثبّت نقاطك، وفيك تنسحب أي وقت. ومعك جوكر واحد بيبدّل سؤال.",
+  pts:["كل درجة بتخلصها: 1، 2، 3، 4","وصلت للآخر +6","انسحبت؟ بتاخد آخر درجة خلصتها"]},
+ rapid:{n:"30 ثانية",s:"أسئلة سريعة ورا بعض",c:"var(--rapid)",
+  rule:"كل واحد بياخد 30 ثانية: أسئلة سريعة ورا بعض، وممنوع «ما بعرف».",
   pts:["الأكثر أجوبة +3","الثاني +1","الأقل −1"]},
  lie:{n:"صح ولا كذب",s:"جملة وحدة كذبة",c:"var(--lie)",
   rule:"اللاعب بيحكي ثلاث جمل عن حاله، وحدة منهم كذبة. الكل بيصوّت عالكذبة بالأصابع.",
   pts:["كل واحد بيكشفها +1","ما حدا كشفها: الكذّاب +3"]},
+ herd:{n:"فكّر متلي",s:"جاوب متل الأغلبية",c:"var(--herd)",
+  rule:"سؤال واحد، وكل واحد بيكتب أول شي بيخطر بباله بالسر. الهدف تفكّر متل الشلة، واللي بيطلع لحاله بياخد الخروف الأسود.",
+  pts:["جوابك متل الأغلبية +1","لحالك بجواب: بتاخد الخروف 🐑","اللي معه الخروف −1 كل جولة"]},
+ auction:{n:"المزاد",s:"راهن وسمّي",c:"var(--auction)",
+  rule:"فئة وحدة، وكل واحد بدوره بيرفع: «بقدر سمّي 6»، «أنا 8»… لحد ما حدا يقول «سمّيهم!». الرابح عنده 30 ثانية يسمّي العدد اللي راهن عليه.",
+  pts:["نجح +3، وإذا راهن على 10 أو أكتر +5","فشل −2، وكل الباقيين +1"]},
  dare:{n:"تحدّي",s:"مهمة قدام الكل",c:"var(--dare)",
   rule:"مهمة سريعة ومضحكة قدام الكل، والشلة بتقيّم.",
   pts:["أسطوري +3","عادي +1","ما عملها −1"]}
@@ -31,7 +40,7 @@ const MODES={
 };
 
 /* ---------------- state ---------------- */
-let S={players:["سامر","ليلى","عمر","ريم","خالد"],mode:"elim",every:0,rounds:12,twists:true};
+let S={players:["سامر","ليلى","عمر","ريم","خالد"],mode:"elim",every:0,rounds:12,twists:true,spicy:true};
 try{const o=JSON.parse(localStorage.getItem("tg_group_setup")||"null");if(o&&Array.isArray(o.players))S={...S,...o}}catch(e){}
 function saveSetup(){try{localStorage.setItem("tg_group_setup",JSON.stringify(S))}catch(e){}}
 let G=null, cleanup=null;
@@ -61,6 +70,8 @@ function draw(key,src){
   }
   const v=POOL[key].pop();(SEEN[key]=SEEN[key]||[]).push(v);saveSeen();return v;
 }
+// الأسئلة الجريئة بتنضاف لمكتبة اللعبة بس إذا مفعّلة
+const pool=(k,base)=>S.spicy&&typeof SPICY!=="undefined"&&SPICY[k]?base.concat(SPICY[k]):base;
 function seenCount(){return Object.values(SEEN).reduce((a,b)=>a+(b?b.length:0),0)}
 
 /* ---------------- setup ---------------- */
@@ -73,7 +84,7 @@ function renderSetup(){
   <section class="hero"><span class="edition">تسلّى غو · الشلة · 3 إلى 12 لاعب</span>
     <div class="hero-art live" aria-hidden="true"><span>${svg("bomb")}</span><span>${svg("said")}</span><span>${svg("hot")}</span><span>${svg("spy")}</span></div>
     <h1>سهرة<em>الشلة</em></h1>
-    <p>موبايل واحد بيلفّ عالقاعدة، وسبع ألعاب بتتناوب، ونقاط بتقلب السهرة.</p></section>
+    <p>موبايل واحد بيلفّ عالقاعدة، وعشر ألعاب بتتناوب، ونقاط بتقلب السهرة.</p></section>
   <section class="block"><span class="label">اللاعبين (${n})</span>
     <div class="players">${S.players.map((p,i)=>`<span class="chip" data-i="${esc(p.slice(0,1))}" style="--cc:${CC[i%7]}">${esc(p)}<button data-del="${i}" aria-label="احذف ${esc(p)}">×</button></span>`).join("")}</div>
     <form class="addrow" id="addForm"><input id="newName" type="text" maxlength="14" placeholder="اسم لاعب جديد" autocomplete="off" aria-label="اسم لاعب جديد"><button type="submit">أضف</button></form></section>
@@ -87,7 +98,9 @@ function renderSetup(){
     <label class="switch"><input type="checkbox" id="twists" ${S.twists?"checked":""}><span class="sw" aria-hidden="true"></span>
       <span><b>المفاجآت</b><small>جولات ذهبية، حرامي، سلسلة نار${S.mode==="elim"?"، دروع ولعنات الأشباح":""}</small></span></label></section>
   <section class="block"><span class="label">اكبس على لعبة لتلعبها لحالها، أو اختار السهرة المخلوطة</span>
-    <div class="games">${Object.entries(GAMES).map(([k,g])=>`<button class="gbtn" data-g="${k}" style="--gc:${g.c}" aria-label="العب ${g.n}"><span class="ico">${svg(k)}</span><span class="gtxt"><b>${g.n}</b><small>${g.s}</small></span><span class="play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M11 3.5v9L4 8z" fill="currentColor"/></svg></span></button>`).join("")}</div></section>
+    <div class="games">${Object.entries(GAMES).map(([k,g])=>`<button class="gbtn" data-g="${k}" style="--gc:${g.c}" aria-label="العب ${g.n}"><span class="ico">${svg(k)}</span><span class="gtxt"><b>${g.n}</b><small>${g.s}</small></span><span class="play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M11 3.5v9L4 8z" fill="currentColor"/></svg></span></button>`).join("")}</div>
+    <label class="switch"><input type="checkbox" id="spicy" ${S.spicy?"checked":""}><span class="sw" aria-hidden="true"></span>
+      <span><b>أسئلة جريئة</b><small>«مين ما بتأمنه على سر؟»، «مين بيصب الزيت عالنار؟»… للقعدات اللي بتتحمّل الصراحة</small></span></label></section>
   <button class="go" id="start">سهرة مخلوطة<small>${MODES[S.mode].n} · كل الألعاب ورا بعض</small></button>
   <p class="note">${LIBRARY.toLocaleString("en")} بطاقة وكلمة · ما بيتكرر شي لحد ما تخلص المكتبة كلها${seenCount()?` · لعبتوا ${Math.min(seenCount(),LIBRARY).toLocaleString("en")} لهلق <button class="linkish" id="resetSeen">صفّر</button>`:""}</p>
   <p class="note">الأجوبة المكتوبة ما بتنحفظ أبداً.</p>`;
@@ -96,6 +109,7 @@ function renderSetup(){
     if(S.players.includes(v)){toast("الاسم موجود");return}
     S.players.push(v);saveSetup();renderSetup();$("#newName").focus()};
   $("#twists").onchange=e=>{S.twists=e.target.checked;saveSetup()};
+  $("#spicy").onchange=e=>{S.spicy=e.target.checked;saveSetup();for(const k of["who","said","dare"])delete POOL[k]};
   stage.onclick=e=>{const b=e.target.closest("button");if(!b||b.closest("form"))return;
     if(b.dataset.del!==undefined){S.players.splice(+b.dataset.del,1);saveSetup();renderSetup()}
     else if(b.dataset.m){S.mode=b.dataset.m;saveSetup();renderSetup()}
@@ -122,7 +136,11 @@ function rulesSheet(){
     <h4>${svg("ghost")}الأشباح</h4><p>اللي بيطلع بيضل معنا: بيأشّر وبيحزر وبيحكم، وعنده <b>لعنة وحدة</b> بياخد فيها نقطتين من أي لاعب لسا باللعبة.</p>
     <h4>${svg("coin")}الجولة الذهبية</h4><p>كل النقاط بالجولة دبل، الربح والخسارة.</p>
     <h4>${svg("bag")}جولة الحرامي</h4><p>أكثر واحد ربح بالجولة بيسرق نقطتين من اللي بيختاره.</p>
+    <h4>${svg("hot")}الكرسي الساخن</h4><p>واحد عالكرسي بيعبّي بطاقة تعريف (شب أو صبية، مرتبط أو لا، عنده ولاد أو لا)، وبعدها خمس درجات أسئلة: تسخين، دافي، حامي، نار، جحيم. كل درجة سؤالين، وكل درجة بتخلصها بتثبّت نقاط (1، 2، 3، 4)، والوصول للآخر +6. بتقدر تنسحب أي وقت وبتاخد المثبّت، ومعك جوكر واحد.</p>
     <h4>${svg("hot")}سلسلة نار</h4><p>إذا ربحت نقاط بثلاث جولات ورا بعض: +2 بونص.</p>
+    <h4>${svg("herd")}الخروف الأسود</h4><p>بـ«فكّر متلي»، إذا كنت الوحيد بجواب ما حدا كتبه، بتاخد الخروف. وطول ما هو معك: −1 كل جولة، لحد ما حدا غيرك ياخده.</p>
+    <h4>${svg("dare")}جولة الصاعقة</h4><p>بتطلع أحياناً بدل «مين فينا»: خمس أسئلة ورا بعض بدون دفاع، كل أغلبية بتاخد تاج، وصاحب أكتر تيجان +3.</p>
+    <h4>${svg("who")}مين فينا</h4><p>اللي أشّر متل الأغلبية +1. المتّهم بيختار: يعترف (+1) أو يدافع (+3 أو −2)، وبعدها فيه «يقلب الطاولة» ويسأل واحد أشّر عليه «ليش أنا؟». الأسئلة الجريئة (🌶 و🔥) تصويتها سري، وبالـ🔥 نقاط المتّهم دبل.</p>
     <h4>${svg("swords")}المبارزة</h4><p>فئة وحدة، وكل واحد بدوره عنده 5 ثواني يقول كلمة منها. اللي بيعلق أو بيكرر بيخسر.</p>
     <h4>نقاط الألعاب</h4>
     <ul class="ptsl">${Object.entries(GAMES).map(([k,g])=>`<li style="--gc:${g.c}"><span class="ico">${svg(k)}</span><b>${g.n}</b><span>${nfix(g.pts.join(" · "))}</span></li>`).join("")}</ul>
@@ -138,7 +156,7 @@ function start(chosen){
      total:S.mode==="classic"?S.rounds:null,twists:S.twists,
      r:-1,q:[],tws:[],turn:Math.floor(Math.random()*S.players.length),pts:{...z},alive:new Set(S.players),out:[],
      shield:{},curse:{},streak:{...z},log:[],prevRank:{},phase:"intro",step:"",d:{},
-     st:{who:{...z},bombs:{...z},detect:{...z},spyWins:{...z},hotBest:{...z},legend:{...z},fires:{...z},steals:{...z}}};
+     st:{who:{...z},bombs:{...z},detect:{...z},spyWins:{...z},hotBest:{...z},seat:{...z},legend:{...z},fires:{...z},steals:{...z},read:{...z},herd:{...z},auction:{...z}}};
   S.players.forEach(p=>{G.shield[p]=S.mode==="elim"&&S.twists});
   $("#tools").hidden=false;$("#homeBtn").hidden=true;$("#roundBar").hidden=false;nextRound();
 }
@@ -155,7 +173,8 @@ function pickGame(){
 }
 function nextRound(){
   stopAll();G.r++;G.q[G.r]=pickGame();
-  const t={};if(G.twists&&G.r>=1){const x=Math.random();if(x<.2)t.golden=1;else if(x<.34)t.thief=1}
+  let t={};if(G.twists&&G.r>=1){const x=Math.random();if(x<.2)t.golden=1;else if(x<.34)t.thief=1}
+  if(G.twists&&G.r>=1&&G.q[G.r]==="who"&&Math.random()<.35)t={blitz:1};
   G.tws[G.r]=t;G.log=[];G.d={};G.step="";G.phase="intro";
   G.prevRank=rankMap();
   render();window.scrollTo({top:0,behavior:"smooth"});
@@ -176,6 +195,7 @@ function endRound(){
       else G.streak[p]=0;
     });
   }
+  if(G.sheep&&G.alive.has(G.sheep)){G.pts[G.sheep]-=1;G.log.push({p:G.sheep,v:-1,why:"الخروف الأسود 🐑"})}
   G.d.thiefDone=false;G.d.thief=null;
   if(tw().thief){const net={};G.log.forEach(e=>{if(G.alive.has(e.p))net[e.p]=(net[e.p]||0)+e.v});
     const pos=Object.entries(net).filter(([,v])=>v>0);if(pos.length){const mx=Math.max(...pos.map(x=>x[1]));G.d.thief=rnd(pos.filter(x=>x[1]===mx))[0]}}
@@ -184,7 +204,7 @@ function endRound(){
 
 /* ---------------- render ---------------- */
 function renderBar(){
-  const t=tw(),chips=`${t.golden?`<span class="twc gold">${svg("coin")}ذهبية ×2</span>`:""}${t.thief?`<span class="twc thief">${svg("bag")}حرامي</span>`:""}`;
+  const t=tw(),chips=`${t.golden?`<span class="twc gold">${svg("coin")}ذهبية ×2</span>`:""}${t.thief?`<span class="twc thief">${svg("bag")}حرامي</span>`:""}${t.blitz?`<span class="twc blitz">${svg("dare")}صاعقة</span>`:""}`;
   if(G.mode==="elim"){
     $("#roundBar").innerHTML=`<span class="rb-l">جولة ${G.r+1} · باقي ${alive().length}${chips}</span><span class="avs">${S.players.map((p,i)=>`<i class="${G.alive.has(p)?"":"gh"}" style="--cc:${CC[i%7]}" title="${esc(p)}">${esc(p.slice(0,1))}</i>`).join("")}</span>`;
   }else{
@@ -194,7 +214,7 @@ function renderBar(){
 function render(){
   stopAll();renderBar();
   if(G.phase==="intro"){setG(game());return intro(game())}
-  if(G.phase==="play"){setG(game());return ({spy:rSpy,bomb:rBomb,who:rWho,said:rSaid,hot:rHot,lie:rLie,dare:rDare})[game()]()}
+  if(G.phase==="play"){setG(game());return ({spy:rSpy,bomb:rBomb,who:rWho,said:rSaid,hot:rHotSeat,rapid:rRapid,lie:rLie,dare:rDare,herd:rHerd,auction:rAuction})[game()]()}
   if(G.phase==="recap")return recap();
   if(G.phase==="danger")return danger();
   if(G.phase==="duel")return duel();
@@ -203,13 +223,14 @@ function render(){
 }
 function intro(g){
   const gm=GAMES[g],t=tw();
-  const focus=["lie","dare"].includes(g)?`<span class="seat">على الكرسي: ${esc(P())}</span>`:"";
+  const focus=["lie","dare","hot"].includes(g)?`<span class="seat">على الكرسي: ${esc(P())}</span>`:g==="auction"?`<span class="seat">بيفتح المزاد: ${esc(P())}</span>`:"";
   stage.innerHTML=`<section class="splash${t.golden?" golden":""}"><span class="num">الجولة ${G.r+1}${G.total?` من ${G.total}`:""}</span>
     ${t.golden?`<span class="twbanner gold">${svg("coin")}جولة ذهبية: كل النقاط دبل</span>`:""}
     ${t.thief?`<span class="twbanner thief">${svg("bag")}جولة الحرامي: الأكثر ربحاً بيسرق نقطتين</span>`:""}
+    ${t.blitz?`<span class="twbanner blitz">${svg("dare")}جولة الصاعقة: 5 أسئلة ورا بعض</span>`:""}
     <div class="badge draw live">${svg(g)}</div>
-    <h2>${gm.n}</h2><p>${gm.rule}</p>${focus}
-    <ul class="ptsrow">${gm.pts.map(x=>`<li>${nfix(x)}</li>`).join("")}</ul>
+    <h2>${gm.n}</h2><p>${t.blitz?"خمس أسئلة بسرعة بدون دفاع. كل سؤال بيعطي تاج للي بياخد الأغلبية، وصاحب أكتر تيجان بياخد +3.":gm.rule}</p>${focus}
+    <ul class="ptsrow">${(t.blitz?["كل سؤال: تاج للأغلبية","أكتر تيجان +3"]:gm.pts).map(x=>`<li>${nfix(x)}</li>`).join("")}</ul>
     <button class="btn main" id="ok">يلا</button></section>`;
   $("#ok").onclick=()=>go("play");$("#ok").focus();
 }
@@ -313,28 +334,119 @@ function rBomb(){
   }
 }
 
-/* ---- who ---- */
+/* ---- who: اقرأ الشلة · اعترف ولا دافع · قلب الطاولة · تصويت سري · أشّر على حالك · صاعقة · حرارة ---- */
+const HEATS=[null,{i:"🙂",n:"خفيف"},{i:"🌶",n:"حار"},{i:"🔥",n:"نار"}];
+const FIRE_WORDS=/سر|وجه تاني|من وراك|مصلحت|يتكبّر|الزيت|بغيابك|ملاك|ديكتاتور|قليل ذوق/;
+function whoHeat(q){if(typeof SPICY!=="undefined"&&SPICY.who.includes(q))return FIRE_WORDS.test(q)?3:2;return 1}
+const heatTag=h=>`<span class="heatb h${h}">${HEATS[h].i} ${HEATS[h].n}${h>1?" · تصويت سري":""}${h===3?" · نقاط المتّهم دبل":""}</span>`;
+function countdown(q,after){
+  stage.innerHTML=`<p class="big" id="n">3</p><p class="note">${esc(q)}</p>`;
+  let n=3;beep(600);
+  const id=setInterval(()=>{n--;const el=$("#n");if(!el)return;
+    if(n>0){el.textContent=n;beep(600)}else{clearInterval(id);el.textContent="أشّروا!";beep(1000,.25);const t=setTimeout(after,1400);cleanup=()=>clearTimeout(t)}},800);
+  cleanup=()=>clearInterval(id);
+}
 function rWho(){
-  const d=G.d;
-  if(G.step==="play"){
-    d.q=d.q||draw("who",WHO);
-    stage.innerHTML=cardHTML("who","",esc(d.q),`<p class="howto">لما يخلص العدّ، الكل بيأشّر بنفس اللحظة، حتى الأشباح. ممنوع التأخير ولا التغيير!</p>`)+
-      `<div class="actions one"><button class="btn main" id="cd">عدّولنا</button></div>`;
-    $("#cd").onclick=()=>go("count");
-  }else if(G.step==="count"){
-    stage.innerHTML=`<p class="big" id="n">3</p><p class="note">${esc(d.q)}</p>`;
-    let n=3;beep(600);
-    const id=setInterval(()=>{n--;const el=$("#n");if(!el)return;
-      if(n>0){el.textContent=n;beep(600)}else{clearInterval(id);el.textContent="أشّروا!";beep(1000,.25);setTimeout(()=>{if(G&&G.step==="count")go("pick")},1400)}},800);
-    cleanup=()=>clearInterval(id);
-  }else if(G.step==="pick"){
-    namePicker("مين أخذ أكثر إشارات؟","اكبسوا اسمه",alive(),false,p=>{G.st.who[p]++;d.p=p;go("defend")});
-  }else if(G.step==="defend"){
-    stage.innerHTML=cardHTML("who",`الكل اختار <b>${esc(d.p)}</b>`,"20 ثانية دفاع عن النفس!",`
-      <p class="big" id="t">20</p>`)+`<div class="actions"><button class="btn" id="no">مش مقنع −1</button><button class="btn main" id="yes">مقنع +2</button></div>`;
+  if(tw().blitz)return rBlitz();
+  const d=G.d,st=G.step;
+  const m=()=>d.h===3?2:1;
+  if(st==="play"){
+    if(!d.q){d.q=draw("who",pool("who",WHO));d.h=whoHeat(d.q);d.secret=d.h>1;d.ptr=[]}
+    stage.innerHTML=cardHTML("who",heatTag(d.h),esc(d.q),`<p class="howto">${d.secret
+      ?"سؤال جريء: كل واحد بيصوّت بالسر على الموبايل، حتى الأشباح. بتطلع النتيجة بدون ما حدا يعرف مين صوّت لمين."
+      :"لما يخلص العدّ، الكل بيأشّر بنفس اللحظة، حتى الأشباح. ممنوع التأخير ولا التغيير!"}</p>`)+
+      `<div class="actions one"><button class="btn main" id="cd">${d.secret?"نصوّت بالسر":"عدّولنا"}</button></div>`;
+    $("#cd").onclick=()=>{if(d.secret){d.voters=alive().concat(ghosts());d.k=0;d.votes={};go("vpass")}else go("count")};
+  }else if(st==="count"){
+    countdown(d.q,()=>{if(G&&G.step==="count")go("pick")});
+  }else if(st==="pick"){
+    namePicker("مين أخد أكثر إشارات؟","اكبسوا اسمه",alive(),false,p=>{d.target=p;go("readers")},"",["تعادل؟ قرعة",()=>go("tie")]);
+  }else if(st==="tie"){
+    namePicker("مين المتعادلين؟","اكبسوا أسماءهم، والقرعة بتختار واحد",alive(),true,arr=>{
+      if(arr.length<2){toast("اختاروا اثنين على الأقل");return}
+      d.target=rnd(arr);d.lot=true;toast(`القرعة اختارت ${d.target}`);go("readers")},"اسحب القرعة");
+  }else if(st==="readers"){
+    namePicker(`مين أشّر على ${esc(d.target)}؟`,"اكبسوا على كل واحد أشّر عليه، حتى لو هو نفسه",alive(),true,arr=>{
+      d.ptr=arr;
+      arr.forEach(x=>{if(x===d.target)award(x,3,"أشّر على حاله وطلع هو");else{award(x,1,"قرأ الشلة");G.st.read[x]++}});
+      const rest=alive().filter(x=>x!==d.target&&!arr.includes(x));
+      go(rest.length?"selfmiss":"choose")},"تمام");
+  }else if(st==="selfmiss"){
+    namePicker("حدا أشّر على حاله؟","وما طلع هو؟ كل واحد منهم −1. إذا ما حدا، اكبسوا كمّل",alive().filter(x=>x!==d.target&&!d.ptr.includes(x)),true,arr=>{
+      arr.forEach(x=>award(x,-1,"أشّر على حاله لحاله"));go("choose")},"كمّل");
+  }else if(st==="vpass"){
+    const v=d.voters[d.k];
+    curtain(v,"صوّت بالسر وما حدا يتطلّع على الشاشة.",`أنا ${esc(v)}`,()=>go("vote"));
+  }else if(st==="vote"){
+    const v=d.voters[d.k];
+    namePicker(esc(d.q),`${esc(v)}، صوّت بالسر. فيك تختار حالك`,alive(),false,p=>{
+      d.votes[v]=p;d.k++;beep(900,.04);go(d.k<d.voters.length?"vpass":"bars")});
+  }else if(st==="bars"){
+    const cnt={};alive().forEach(p=>cnt[p]=0);Object.values(d.votes).forEach(p=>cnt[p]++);
+    const rows=Object.entries(cnt).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]);
+    const mx=rows[0][1],top=rows.filter(r=>r[1]===mx).map(r=>r[0]);
+    if(!d.target){d.target=rnd(top);d.lot=top.length>1;
+      Object.entries(d.votes).forEach(([v,p])=>{if(v===p&&G.alive.has(v)){if(v===d.target)award(v,3,"صوّت لحاله وطلع هو");else award(v,-1,"صوّت لحاله لحاله")}})}
+    const tot=Object.keys(d.votes).length;
+    stage.innerHTML=`<p class="verdict sm">${esc(d.q)}<small>${tot} صوت · ما حدا بيعرف مين صوّت لمين</small></p>
+      <ol class="bars">${rows.map(([p,n],i)=>`<li class="${p===d.target?"top":""}"><span class="bn">${esc(p)}</span><span class="bt"><i style="--w:${n/mx*100}%;--d:${i*.12}s"></i></span><b>${n}</b></li>`).join("")}</ol>
+      <p class="verdict">${esc(d.target)}!<small>${d.lot?"تعادل، والقرعة اختارته":"أخد الأغلبية"}</small></p>
+      <div class="actions one"><button class="btn main" id="nx">كمّل</button></div>`;
+    $("#nx").onclick=()=>go("choose");
+  }else if(st==="choose"){
+    if(!d.counted){G.st.who[d.target]++;d.counted=true}
+    const k=m();
+    stage.innerHTML=`<section class="duelscr"><div class="badge draw live">${svg("who")}</div>
+      <h2>${esc(d.target)}، الشلة اختارتك!</h2><p>${esc(d.q)}</p>${d.h>1?heatTag(d.h):""}
+      <div class="choice">
+        <button class="btn" id="adm">معهم حق<small>اعتراف بصراحة · ${nfix(sgn(k))}</small></button>
+        <button class="btn main" id="def">بدافع عن حالي<small>20 ثانية · ${nfix(`+${3*k} أو ${sgn(-2*k)}`)}</small></button>
+      </div></section>`;
+    $("#adm").onclick=()=>{award(d.target,k,"اعترف بصراحة");d.res="admit";go("after")};
+    $("#def").onclick=()=>go("defend");
+  }else if(st==="defend"){
+    const k=m();
+    stage.innerHTML=cardHTML("who",`<b>${esc(d.target)}</b> عم يدافع`,"20 ثانية دفاع عن النفس!",`<p class="big" id="t">20</p>`)+
+      `<div class="actions"><button class="btn" id="no">مش مقنع ${nfix(sgn(-2*k))}</button><button class="btn main" id="yes">مقنع ${nfix("+"+3*k)}</button></div>`;
     timer(20,l=>{const t=$("#t");if(t)t.textContent=l>0?l:"خلص!"},()=>beep(1000,.2));
-    $("#yes").onclick=()=>{award(d.p,2,"دفاع مقنع");endRound()};
-    $("#no").onclick=()=>{award(d.p,-1,"دفاع ضعيف");endRound()};
+    $("#yes").onclick=()=>{award(d.target,3*k,"دفاع مقنع");d.res="won";go("after")};
+    $("#no").onclick=()=>{award(d.target,-2*k,"دفاع ضعيف");d.res="lost";go("after")};
+  }else if(st==="after"){
+    const k=m(),flippers=d.secret?[]:d.ptr.filter(x=>x!==d.target);
+    const txt={admit:["صراحة بتستاهل!",`${esc(d.target)} ${nfix(sgn(k))}`],won:["أقنعهم!",`${esc(d.target)} ${nfix("+"+3*k)}`],lost:["ما مشي الحال",`${esc(d.target)} ${nfix(sgn(-2*k))}`]}[d.res];
+    stage.innerHTML=`<p class="verdict">${txt[0]}<small>${txt[1]}</small></p>
+      ${flippers.length?`<div class="twbox flip"><span class="ico">${svg("swords")}</span><div><b>قلب الطاولة</b><small>${esc(d.target)} بيسأل واحد أشّر عليه: «ليش أنا؟». إذا جوابه ظالم بيخسر نقطة.</small></div><button class="btn" id="flip">ليش أنا؟</button></div>`:""}
+      <div class="actions one"><button class="btn main" id="nx">حصيلة الجولة</button></div>`;
+    if(flippers.length)$("#flip").onclick=()=>namePicker(`${esc(d.target)} بيسأل…`,"اختار واحد أشّر عليك",flippers,false,v=>{d.flipV=v;go("flipans")});
+    $("#nx").onclick=endRound;
+  }else if(st==="flipans"){
+    const v=d.flipV;
+    stage.innerHTML=cardHTML("who",`قلب الطاولة`,`${esc(v)}، ليش ${esc(d.target)}؟`,`<p class="howto">جملة وحدة قدام الكل، والشلة بتحكم.</p>`)+
+      `<div class="actions"><button class="btn" id="bad">ظالم ${nfix("−1")}</button><button class="btn main" id="fair">جواب منطقي</button></div>`;
+    $("#bad").onclick=()=>{award(v,-1,"اتّهام ظالم");endRound()};
+    $("#fair").onclick=endRound;
+  }
+}
+/* جولة الصاعقة: 5 أسئلة، تاج لكل أغلبية، الأكثر تيجان +3 */
+function rBlitz(){
+  const d=G.d,st=G.step;
+  if(!d.bq){d.bq=[];for(let i=0;i<5;i++)d.bq.push(draw("who",WHO));d.bi=0;d.crowns={}}
+  if(st==="play"){
+    if(d.bi>=5)return go("bres");
+    stage.innerHTML=cardHTML("who",`<span class="heatb blitzb">⚡ صاعقة · سؤال ${d.bi+1} من 5</span>`,esc(d.bq[d.bi]))+
+      `<div class="actions one"><button class="btn main" id="cd">عدّولنا</button></div>`;
+    $("#cd").onclick=()=>go("bcount");
+  }else if(st==="bcount"){
+    countdown(d.bq[d.bi],()=>{if(G&&G.step==="bcount")go("bpick")});
+  }else if(st==="bpick"){
+    namePicker("مين أخد الأغلبية؟",`سؤال ${d.bi+1} من 5 · تاج إله`,alive(),false,p=>{d.crowns[p]=(d.crowns[p]||0)+1;d.bi++;beep(950,.05);go("play")},"",["تعادل، ولا تاج",()=>{d.bi++;go("play")}]);
+  }else if(st==="bres"){
+    const rows=Object.entries(d.crowns).sort((a,b)=>b[1]-a[1]),mx=rows.length?rows[0][1]:0,top=rows.filter(r=>r[1]===mx).map(r=>r[0]);
+    if(!d.paid){d.paid=true;top.forEach(p=>award(p,3,"نجم الصاعقة"))}
+    stage.innerHTML=`<p class="verdict">${top.length?`${top.map(esc).join(" و")} نجم الصاعقة!`:"ولا تاج!"}<small>${top.length?nfix("+3 "+(top.length>1?"لكل واحد":"")):"كلها تعادلات"}</small></p>
+      ${rows.length?`<ol class="board">${rows.map(([p,n],i)=>`<li><span class="rank">${i+1}</span><span class="nm">${esc(p)}</span><span class="crwn">${"👑".repeat(n)}</span><b>${n}</b></li>`).join("")}</ol>`:""}
+      <div class="actions one"><button class="btn main" id="nx">حصيلة الجولة</button></div>`;
+    $("#nx").onclick=endRound;
   }
 }
 
@@ -342,7 +454,7 @@ function rWho(){
 function rSaid(){
   const d=G.d,ps=alive();
   if(G.step==="play"){
-    d.q=draw("said",SAID);d.k=0;d.ans=[];
+    d.q=draw("said",pool("said",SAID));d.k=0;d.ans=[];
     stage.innerHTML=cardHTML("said","السؤال لكل اللي باللعبة",esc(d.q),`<p class="howto">كل واحد بيكتب جوابه بالسر. اكتبوا بطريقة ما بتفضحكم!</p>`)+
       `<div class="actions one"><button class="btn main" id="ok">نبلّش نكتب</button></div>`;
     $("#ok").onclick=()=>go("pass");
@@ -368,18 +480,76 @@ function rSaid(){
   }
 }
 
-/* ---- hot seat: everyone gets 30 seconds ---- */
-function rHot(){
+/* ---- الكرسي الساخن: بطاقة تعريف، وبعدها خمس درجات أحرج فأحرج ---- */
+const LV=[null,{n:"تسخين",f:"🙂"},{n:"دافي",f:"🌶"},{n:"حامي",f:"🔥"},{n:"نار",f:"🔥🔥"},{n:"جحيم",f:"😈"}];
+const LADDER=[0,1,2,3,4,6],PER_LV=2;
+let PROF={};try{PROF=JSON.parse(localStorage.getItem("tg_profiles")||"{}")||{}}catch(e){}
+function saveProf(){try{localStorage.setItem("tg_profiles",JSON.stringify(PROF))}catch(e){}}
+function pickF(key,src){ // بدون تكرار، من مجموعة مفلترة حسب بطاقة التعريف
+  const seen=new Set(SEEN[key]||[]);let fresh=src.filter(x=>!seen.has(x));
+  if(!fresh.length){SEEN[key]=(SEEN[key]||[]).filter(x=>!src.includes(x));fresh=[...src]}
+  const v=rnd(fresh);(SEEN[key]=SEEN[key]||[]).push(v);saveSeen();return v}
+function seatFlags(pr){return (pr.st!=="single"?"P":"S")+(pr.st==="married"?"M":"")+(pr.kids?"K":"")}
+function fmtSeat(t,p,pr,x){
+  const f=pr.g==="f",partner=pr.st==="married"?(f?"جوزك":"مرتك"):(f?"خطيبك":"خطيبتك");
+  return t.replace(/\{S\}/g,p).replace(/\{X\}/g,x).replace(/\{P\}/g,partner).replace(/\{([^|}]*)\|([^}]*)\}/g,(_,m,w)=>f?w:m);
+}
+function rHotSeat(){
+  const d=G.d;if(!d.p)d.p=P();const p=d.p;
+  if(G.step==="play"){
+    const pr=d.pr||(d.pr={...{g:"m",st:"single",kids:false},...(PROF[p]||{})});
+    const seg=(k,opts)=>`<div class="seg3" data-k="${k}">${opts.map(([v,t])=>`<button data-v="${v}" aria-pressed="${String(pr[k])===String(v)}">${t}</button>`).join("")}</div>`;
+    stage.innerHTML=`<section class="private seatprof"><span class="sticker">${svg("hot")}عالكرسي: ${esc(p)}</span>
+      <h2>${esc(p)}، عرّفنا عليك أول</h2><p class="small">على أساسها بتطلع الأسئلة. وبتنحفظ للمرة الجاية.</p>
+      <span class="label">انت</span>${seg("g",[["m","شب"],["f","صبية"]])}
+      <span class="label">الحالة</span>${seg("st",[["single","مو مرتبط"],["engaged","خاطب"],["married","متزوج"]])}
+      <span class="label">عندك ولاد؟</span>${seg("kids",[[false,"لا"],[true,"إي"]])}
+      <button class="btn main" id="go">يلا عالكرسي 🔥</button></section>`;
+    stage.querySelector(".seatprof").onclick=e=>{const b=e.target.closest(".seg3 button");if(!b)return;const k=b.parentNode.dataset.k,v=b.dataset.v;
+      pr[k]=k==="kids"?v==="true":v;b.parentNode.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b))};
+    $("#go").onclick=()=>{PROF[p]={g:pr.g,st:pr.st,kids:pr.kids};saveProf();d.lv=1;d.i=0;d.joker=1;d.q=null;go("q")};
+  }else if(G.step==="q"){
+    const pr=d.pr,fl=seatFlags(pr);
+    if(!d.q){const src=HOTSEAT.filter(q=>q[0]===d.lv&&[...q[1]].every(c=>fl.includes(c))).map(q=>q[2]);
+      d.q=pickF("seat"+d.lv,src);const others=alive().filter(x=>x!==p);d.x=others.length?rnd(others):p}
+    const lv=LV[d.lv],banked=LADDER[d.lv-1];
+    stage.innerHTML=`<div class="ladder">${[1,2,3,4,5].map(k=>`<i class="${k<d.lv?"done":k===d.lv?"on":""}"><b>${LV[k].f}</b><span>${LV[k].n}</span></i>`).join("")}</div>
+      <div class="cardwrap"><article class="card seatcard lv${d.lv}"><div class="head"><span class="sticker">${svg("hot")}درجة ${d.lv}: ${lv.n} ${lv.f}</span><span>سؤال ${d.i+1} من ${PER_LV}</span></div>
+        <div class="to">عالكرسي: <b>${esc(p)}</b></div>
+        <p class="q">${esc(fmtSeat(d.q,p,pr,d.x))}</p>
+        <p class="howto">${banked?nfix(`مثبّت معك +${banked}. إذا انسحبت هلق بتاخدهن.`):"لسا ما ثبّتت شي. خلّص هالدرجة لتاخد أول نقطة."}</p></article></div>
+      <div class="seatbtns"><button class="btn" id="out">انسحب</button><button class="btn" id="jk" ${d.joker?"":"disabled"}>🃏 جوكر${d.joker?"":" (راح)"}</button><button class="btn main" id="ok">جاوب ✓</button></div>`;
+    $("#ok").onclick=()=>{beep(900,.05);d.q=null;d.i++;
+      if(d.i>=PER_LV){d.i=0;d.lv++;
+        if(d.lv>5){d.done=5;return go("res")}
+        toast(`ثبّتت +${LADDER[d.lv-1]}! الدرجة الجاية: ${LV[d.lv].n} ${LV[d.lv].f}`);buzz(60)}
+      render()};
+    $("#jk").onclick=()=>{if(!d.joker)return;d.joker=0;d.q=null;beep(500,.08);render()};
+    $("#out").onclick=()=>{d.done=d.lv-1;go("res")};
+  }else if(G.step==="res"){
+    const v=LADDER[d.done],top=d.done>=5;
+    if(!d.scored){d.scored=true;if(v)award(p,v,top?"وصل للآخر عالكرسي":`عالكرسي لدرجة ${LV[d.done].n}`);G.st.seat[p]=Math.max(G.st.seat[p]||0,top?6:d.done);if(top){beep(1300,.3);buzz([80,50,80,50,200])}}
+    stage.innerHTML=`<section class="duelscr"><div class="badge draw live">${svg(top?"crown":"hot")}</div>
+      <h2>${(f=>top?`${esc(p)} ${f?"وصلت":"وصل"} للآخر! 😈`:d.done?`${esc(p)} ${f?"وقفت":"وقف"} عند «${LV[d.done].n}»`:`${esc(p)} ${f?"انسحبت":"انسحب"} من أولها 🐔`)(d.pr&&d.pr.g==="f")}</h2>
+      <p>${v?nfix(`+${v} نقاط`):"ولا نقطة"}</p>
+      <div class="ladder small">${[1,2,3,4,5].map(k=>`<i class="${k<=d.done?"done":""}"><b>${LV[k].f}</b><span>${LV[k].n}</span></i>`).join("")}</div>
+      <button class="btn main" id="nx">حصيلة الجولة</button></section>`;
+    $("#nx").onclick=()=>{rotate();endRound()};
+  }
+}
+
+/* ---- 30 ثانية: كل واحد 30 ثانية أسئلة سريعة ---- */
+function rRapid(){
   const d=G.d;
   if(!d.order){const a=alive(),s=a.indexOf(P());d.order=a.slice(s).concat(a.slice(0,s));d.k=0;d.sc={}}
   const p=d.order[d.k];
   if(G.step==="play"){
-    stage.innerHTML=cardHTML("hot",`الدور ${d.k+1} من ${d.order.length}: <b>${esc(p)}</b>`,"30 ثانية. جاهز؟",`<p class="howto">واحد تاني بيمسك الموبايل وبيقرأ الأسئلة بسرعة، وبيكبس «جاوب» بعد كل جواب. ممنوع «ما بعرف»!</p>
+    stage.innerHTML=cardHTML("rapid",`الدور ${d.k+1} من ${d.order.length}: <b>${esc(p)}</b>`,"30 ثانية. جاهز؟",`<p class="howto">واحد تاني بيمسك الموبايل وبيقرأ الأسئلة بسرعة، وبيكبس «جاوب» بعد كل جواب. ممنوع «ما بعرف»!</p>
       ${Object.keys(d.sc).length?`<ul class="minisc">${Object.entries(d.sc).map(([n,v])=>`<li><span>${esc(n)}</span><b>${v}</b></li>`).join("")}</ul>`:""}`)+
       `<div class="actions one"><button class="btn main" id="ok">ابدأ الـ30 ثانية</button></div>`;
     $("#ok").onclick=()=>{d.n=0;go("run")};
   }else if(G.step==="run"){
-    stage.innerHTML=`<div class="timerrow"><output id="t">0:30</output><span class="sticker">${svg("hot")}${esc(p)} · <span id="c">0</span></span></div>
+    stage.innerHTML=`<div class="timerrow"><output id="t">0:30</output><span class="sticker">${svg("rapid")}${esc(p)} · <span id="c">0</span></span></div>
       <div class="timerbar"><div id="bar" style="width:100%"></div></div>
       <div class="cardwrap"><article class="card" id="qc" style="min-height:220px"><p class="q" id="q">${esc(draw("hot",HOT))}</p></article></div>
       <div class="actions"><button class="btn" id="sk">تخطّي</button><button class="btn main" id="nx">جاوب!</button></div>`;
@@ -419,9 +589,98 @@ function rLie(){
   }
 }
 
+/* ---- فكّر متلي: جاوب متل الأغلبية، واللي لحاله بياخد الخروف ---- */
+function normA(x){return String(x).replace(/[ً-ْـ]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").replace(/[^\p{L}\p{N}\s]/gu," ").trim().split(/\s+/).map(w=>w.replace(/^(وال|بال|ال)(?=\S\S)/,"")).join(" ")}
+function rHerd(){
+  const d=G.d,ps=alive();
+  if(G.step==="play"){
+    d.q=draw("herd",HERD);d.k=0;d.ans=[];d.cl=null;
+    stage.innerHTML=cardHTML("herd","أول شي بيخطر ببالك",esc(d.q),`<p class="howto">كل واحد بيكتب جوابه بالسر، بكلمة أو كلمتين. لازم تفكّر متل الشلة! واللي بيطلع لحاله بجواب بياخد الخروف 🐑${G.sheep?` من <b>${esc(G.sheep)}</b>`:""}.</p>`)+
+      `<div class="actions one"><button class="btn main" id="ok">نبلّش نكتب</button></div>`;
+    $("#ok").onclick=()=>go("pass");
+  }else if(G.step==="pass"){
+    curtain(ps[d.k],"اكتب أول شي بيخطر ببالك. بسرعة وبدون تفكير كتير!",`أنا ${esc(ps[d.k])}`,()=>go("write"));
+  }else if(G.step==="write"){
+    stage.innerHTML=`<section class="private"><span class="sticker">${svg("herd")}أول شي بيخطر ببالك</span><p class="q">${esc(d.q)}</p>
+      <input class="herdin" id="a" maxlength="30" autocomplete="off" placeholder="جوابك…" aria-label="جوابك">
+      <button class="btn dark" id="done">${d.k<ps.length-1?"خبّي ومرّر":"خلصنا كلنا"}</button></section>`;
+    const inp=$("#a");inp.focus();
+    const done=()=>{const v=inp.value.trim();if(!v){toast("اكتب شي أول");return}
+      d.ans.push({p:ps[d.k],a:v});d.k++;go(d.k<ps.length?"pass":"group")};
+    $("#done").onclick=done;inp.onkeydown=e=>{if(e.key==="Enter")done()};
+  }else if(G.step==="group"){
+    if(!d.cl){const m=new Map();d.ans.forEach(x=>{const k=normA(x.a)||x.a;if(!m.has(k))m.set(k,[]);m.get(k).push(x)});d.cl=[...m.values()];d.sel=null}
+    stage.innerHTML=`<p class="verdict sm">${esc(d.q)}<small>نفس المعنى بكتابة مختلفة؟ (متل «كبة» و«كبّة نية») اكبس على مجموعة وبعدين على التانية لتدمجهم</small></p>
+      <div class="herdcl">${d.cl.map((c,i)=>`<button data-i="${i}" aria-pressed="${d.sel===i}"><b>${esc(c[0].a)}</b><span>${c.map(x=>esc(x.p)).join("، ")}</span><i>${c.length}</i></button>`).join("")}</div>
+      <div class="actions"><button class="btn" id="rs">رجّع متل ما كان</button><button class="btn main" id="sc">احسب</button></div>`;
+    stage.querySelector(".herdcl").onclick=e=>{const b=e.target.closest("button");if(!b)return;const i=+b.dataset.i;
+      if(d.sel===null||d.sel===i){d.sel=d.sel===i?null:i}else{const a=Math.min(d.sel,i),z=Math.max(d.sel,i);d.cl[a]=d.cl[a].concat(d.cl[z]);d.cl.splice(z,1);d.sel=null;beep(800,.05)}
+      render()};
+    $("#rs").onclick=()=>{d.cl=null;render()};
+    $("#sc").onclick=()=>go("res");
+  }else if(G.step==="res"){
+    const cl=[...d.cl].sort((a,b)=>b.length-a.length),mx=cl[0].length,tops=cl.filter(c=>c.length===mx),singles=cl.filter(c=>c.length===1);
+    const win=tops.length===1&&mx>1?tops[0]:null;
+    if(!d.scored){d.scored=true;
+      if(win)win.forEach(x=>{award(x.p,1,"فكّر متل الشلة");G.st.herd[x.p]++});
+      d.prevSheep=G.sheep;
+      if(singles.length===1&&cl.length>1){G.sheep=singles[0][0].p;beep(200,.3);buzz([80,60,80])}
+    }
+    const sheepTxt=G.sheep&&G.sheep!==d.prevSheep?`🐑 الخروف الأسود صار مع <b>${esc(G.sheep)}</b>! −1 كل جولة لحد ما حدا ياخده منه`
+      :G.sheep?`🐑 الخروف لسا مع <b>${esc(G.sheep)}</b>`:"ما حدا أخد الخروف";
+    stage.innerHTML=`<p class="verdict">${win?`الأغلبية: «${esc(win[0].a)}»`:mx===1?"كل واحد بوادي!":"تعادل! ما في أغلبية"}<small>${win?nfix(`${win.length} لاعبين +1`):"ولا نقطة بهالجولة"}</small></p>
+      <div class="herdcl done">${cl.map(c=>`<div class="${c===win?"win":""}${c.length===1&&singles.length===1&&cl.length>1?" lone":""}"><b>${esc(c[0].a)}</b><span>${c.map(x=>esc(x.p)).join("، ")}</span><i>${c.length}</i></div>`).join("")}</div>
+      <p class="sheepline">${sheepTxt}</p>
+      <div class="actions one"><button class="btn main" id="nx">حصيلة الجولة</button></div>`;
+    $("#nx").onclick=endRound;
+  }
+}
+
+/* ---- المزاد: راهن على قديش بتقدر تسمّي، وسمّيهم بـ30 ثانية ---- */
+function rAuction(){
+  const d=G.d;
+  if(G.step==="play"){
+    d.cat=d.cat||draw("auction",BOMB);d.bid=d.bid||5;
+    stage.innerHTML=cardHTML("auction",`الفئة`,esc(d.cat),`<p class="howto"><b>${esc(P())}</b> بيفتح المزاد: «بقدر سمّي 4». اللي بعده يا بيرفع («أنا 6») يا بيقول <b>«سمّيهم!»</b>. لما حدا يقول «سمّيهم!»، آخر واحد رفع لازم يسمّي العدد اللي حكاه بـ30 ثانية.</p>`)+
+      `<div class="actions one"><button class="btn main" id="ok">حدا قال «سمّيهم!»</button></div>`;
+    $("#ok").onclick=()=>go("win");
+  }else if(G.step==="win"){
+    namePicker("مين ربح المزاد؟","آخر واحد رفع",alive(),false,p=>{d.who=p;go("bid")});
+  }else if(G.step==="bid"){
+    stage.innerHTML=`<section class="duelscr"><div class="badge draw live">${svg("auction")}</div>
+      <h2>${esc(d.who)} راهن على…</h2>
+      <div class="stepper"><button class="btn" id="mn" aria-label="أقل">−</button><output id="bv">${d.bid}</output><button class="btn" id="pl" aria-label="أكتر">+</button></div>
+      <p class="hint">${esc(d.cat)}</p>
+      <button class="btn main" id="go">يلا، 30 ثانية!</button></section>`;
+    const upd=()=>{$("#bv").textContent=d.bid};
+    $("#mn").onclick=()=>{d.bid=Math.max(2,d.bid-1);upd()};$("#pl").onclick=()=>{d.bid=Math.min(30,d.bid+1);upd()};
+    $("#go").onclick=()=>{d.n=0;go("run")};
+  }else if(G.step==="run"){
+    stage.innerHTML=`<section class="duelscr">
+      <div class="dcat"><small>${esc(d.who)} بيسمّي</small><b>${esc(d.cat)}</b></div>
+      <div class="ring5"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="r-bg"/><circle cx="60" cy="60" r="52" class="r-fg" id="rf"/></svg><output id="t">30</output></div>
+      <p class="aucnum"><b id="cn">0</b> من ${d.bid}</p>
+      <div class="actions"><button class="btn" id="gu">استسلم</button><button class="btn main big2" id="hit">✓ صح</button></div></section>`;
+    const rf=$("#rf"),L=2*Math.PI*52;rf.style.strokeDasharray=L;rf.style.strokeDashoffset=0;
+    requestAnimationFrame(()=>{rf.style.transition="stroke-dashoffset 30s linear";rf.style.strokeDashoffset=L});
+    const fin=ok=>{stopAll();d.ok=ok;go("res")};
+    timer(30,l=>{const t=$("#t");if(t)t.textContent=Math.max(0,l);if(l>0&&l<=5)beep(700,.05)},()=>fin(false));
+    $("#hit").onclick=()=>{d.n++;$("#cn").textContent=d.n;beep(950,.05);if(d.n>=d.bid){beep(1300,.2);fin(true)}};
+    $("#gu").onclick=()=>fin(false);
+  }else if(G.step==="res"){
+    if(!d.scored){d.scored=true;
+      if(d.ok){const v=d.bid>=10?5:3;award(d.who,v,d.bid>=10?"مزاد جريء":"ربح المزاد");G.st.auction[d.who]++;buzz([60,40,60])}
+      else{award(d.who,-2,"خسر المزاد");alive().forEach(x=>{if(x!==d.who)award(x,1,"المزاد طار")});buzz([300])}}
+    stage.innerHTML=`<section class="duelscr">${d.ok?`<div class="badge draw live">${svg("crown")}</div><h2>${esc(d.who)} عملها!</h2><p>${nfix(`سمّى ${d.bid} بالوقت · ${d.bid>=10?"+5":"+3"}`)}</p>`
+      :`<div class="shake"><p class="boom sm">طار!</p></div><h2>${esc(d.who)} سمّى ${d.n} من ${d.bid}</h2><p>${nfix("هو −2، وكل الباقيين +1")}</p>`}
+      <button class="btn main" id="nx">حصيلة الجولة</button></section>`;
+    $("#nx").onclick=()=>{rotate();endRound()};
+  }
+}
+
 /* ---- dare ---- */
 function rDare(){
-  const p=P(),t=draw("dare",DARE);
+  const p=P(),t=draw("dare",pool("dare",DARE));
   stage.innerHTML=cardHTML("dare",`المهمة لـ<b>${esc(p)}</b>`,esc(t),`<p class="howto">نفّذ، والشلة بتقيّم.</p>`)+
     `<div class="rate"><button class="btn" data-v="-1">ما عملها<b>−1</b></button><button class="btn" data-v="1">عادي<b>+1</b></button><button class="btn main" data-v="3">أسطوري<b>+3</b></button></div>`;
   stage.querySelector(".rate").onclick=e=>{const b=e.target.closest("button");if(!b)return;const v=+b.dataset.v;
@@ -478,7 +737,7 @@ function boardHTML(now){
   now=now||rankMap();
   const a=alive().sort((x,y)=>G.pts[y]-G.pts[x]);
   const rows=a.map(p=>{const was=G.prevRank[p],is=now[p],mv=was&&is?was-is:0;
-    return `<li class="${G.shield[p]?"sh":""}"><span class="rank">${is}</span><span class="nm">${esc(p)}${G.shield[p]?`<i class="mini" title="عنده درع">${svg("shield")}</i>`:""}</span>${mv?`<span class="mv ${mv>0?"up":"dn"}">${mv>0?"▲":"▼"}${Math.abs(mv)}</span>`:"<span></span>"}<b>${num(G.pts[p])}</b></li>`});
+    return `<li class="${G.shield[p]?"sh":""}"><span class="rank">${is}</span><span class="nm">${esc(p)}${G.sheep===p?`<i class="sheep" title="معه الخروف الأسود">🐑</i>`:""}${G.shield[p]?`<i class="mini" title="عنده درع">${svg("shield")}</i>`:""}</span>${mv?`<span class="mv ${mv>0?"up":"dn"}">${mv>0?"▲":"▼"}${Math.abs(mv)}</span>`:"<span></span>"}<b>${num(G.pts[p])}</b></li>`});
   const gh=[...G.out].reverse().map(o=>`<li class="gh"><span class="rank"><i class="mini">${svg("ghost")}</i></span><span class="nm">${esc(o.p)}<small>طلع بالجولة ${o.round}</small></span><span></span><b>${num(o.pts)}</b></li>`);
   return `<ol class="board">${rows.join("")}${gh.join("")}</ol>`;
 }
@@ -613,9 +872,14 @@ function finish(){
   const aw=[
     [topOf(G.st.who),"who","نجم «مين فينا»",n=>`${n} مرة اختاروه`],
     [topOf(G.st.bombs),"bomb","ضحية القنبلة",n=>`انفجرت بإيده ${n} مرة`],
+    [topOf(G.st.read),"eye","بيقرا الشلة",n=>`أشّر متل الأغلبية ${n} مرة`],
+    [topOf(G.st.herd),"herd","قلب الشلة",n=>`فكّر متل الأغلبية ${n} مرة`],
+    [topOf(G.st.auction),"auction","ملك المزاد",n=>`ربح ${n} مزاد`],
+    [G.sheep?[G.sheep,1]:null,"herd","الخروف الأسود 🐑",()=>"خلصت السهرة والخروف معه"],
     [topOf(G.st.detect),"lie","أشطر محقّق",n=>`كشف ${n} مرة`],
     [topOf(G.st.spyWins),"spy","الجاسوس الماكر",n=>`نجا ${n} مرة`],
-    [topOf(G.st.hotBest),"hot","ملك الكرسي الساخن",n=>`${n} جواب بـ30 ثانية`],
+    [topOf(G.st.hotBest),"rapid","ملك الـ30 ثانية",n=>`${n} جواب بـ30 ثانية`],
+    [topOf(G.st.seat),"hot","أجرأ واحد عالكرسي",n=>n>=6?"وصل للآخر":`وصل للدرجة ${n}`],
     [topOf(G.st.legend),"dare","أسطورة التحديات",n=>`${n} تحدي أسطوري`],
     [topOf(G.st.fires),"hot","ولّعها",n=>`${n} سلسلة نار`],
     [topOf(G.st.steals),"bag","الحرامي الظريف",n=>`سرق ${n} مرة`]
