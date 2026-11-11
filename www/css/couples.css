@@ -130,3 +130,42 @@
 .hero h1 em{background:linear-gradient(100deg,var(--hot),var(--coral) 45%,var(--saffron))!important;-webkit-background-clip:text!important;background-clip:text!important}
 .safety i{background:var(--coral);box-shadow:0 0 0 4px color-mix(in srgb,var(--coral) 25%,transparent)}
 .ring circle:last-child{stroke:var(--hot)}
+/* ---------- سلّم الحقيقة (الثنائي الجديد) ---------- */
+.pduo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--bubble-sm);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pname{width:100%;min-width:0;background:transparent;border:0;border-bottom:1.5px dashed var(--line);color:var(--ink);font:inherit;font-family:var(--display);font-weight:700;font-size:1.25rem;padding:2px 0;text-align:center}
+.fl{display:flex;flex-direction:column;gap:3px;font-size:.74rem;color:var(--muted)}
+.fl input,.fl select{width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;padding:7px 8px;font:inherit;font-size:.9rem;color:var(--ink);background:var(--bg)}
+.cseg{display:flex;flex-wrap:wrap;gap:4px;background:var(--bg);border-radius:12px;padding:4px}
+.cseg button{flex:1 1 auto;border:0;background:transparent;border-radius:9px;padding:8px 8px;font-size:.84rem;font-weight:600;color:var(--muted);white-space:nowrap}
+.cseg button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px var(--shadow)}
+.sub{font-size:.78rem;color:var(--muted);font-weight:600;margin-top:4px}
+.duotrack{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.duotrack>div{background:var(--surface);border-radius:var(--bubble-sm);padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:4px 8px;align-items:center;box-shadow:inset 0 0 0 1px var(--line);opacity:.7;transition:all .3s}
+.duotrack>div.me{opacity:1;box-shadow:inset 0 0 0 2px var(--phase)}
+.duotrack b{font-family:var(--display);font-weight:700;overflow-wrap:anywhere}
+.duotrack small{font-weight:700;font-family:var(--display)}
+.mini{grid-column:1/-1;display:grid;grid-template-columns:repeat(6,1fr);gap:3px}
+.mini i{height:6px;border-radius:3px;background:var(--line)}
+.mini i.ok{background:var(--hot)}
+.mini i.on{background:color-mix(in srgb,var(--hot) 45%,var(--line));animation:breathe2 1.4s ease-in-out infinite}
+@keyframes breathe2{50%{opacity:.5}}
+.card.lvl5,.card.lvl6{box-shadow:0 0 0 2px var(--bomb),0 24px 50px -24px var(--shadow)}
+.card.lvl5 .q,.card.lvl6 .q{color:var(--coral-ink)}
+.tag{font-weight:700;color:var(--ink)}
+.cbtns{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:8px}
+.cbtns .btn{padding:14px 6px}
+.cbtns .btn:disabled{opacity:.4}
+.gbonus{width:100%;border-style:dashed}
+.finrows{display:flex;flex-direction:column;gap:8px}
+.finrows>div{background:var(--surface);border-radius:var(--bubble-sm);padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;box-shadow:inset 0 0 0 1px var(--line)}
+.finrows>div.win{box-shadow:inset 0 0 0 2px var(--saffron)}
+.finrows small{grid-column:1;color:var(--muted);font-size:.78rem}
+.finrows strong{grid-row:1/4;grid-column:2;font-family:var(--display);font-weight:800;font-size:1.8rem}
+.score .badge{width:96px;height:96px;border-radius:30px;display:grid;place-items:center;background:color-mix(in srgb,var(--saffron) 18%,var(--surface));color:var(--saffron)}
+.score .badge svg{width:62px;height:62px}
+.prizes{display:flex;flex-direction:column;gap:8px}
+.prizes button{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:var(--bubble-sm);padding:12px;font-weight:600;text-align:start;line-height:1.5}
+.prizes button[aria-pressed=true]{border-color:var(--saffron);background:color-mix(in srgb,var(--saffron) 14%,var(--surface))}
+@media (max-width:380px){.pduo{grid-template-columns:1fr}}
+.linkish{background:none;border:0;padding:0;color:var(--spy);font:inherit;font-size:.86rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
