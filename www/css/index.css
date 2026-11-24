@@ -73,3 +73,20 @@
 .m-go{background:var(--night);color:#fff}
 .inst-btn{background:var(--night)}
 .perks li{border-radius:var(--bubble-sm)}
+
+/* ميدان */
+.m-arena{--a:var(--saffron);--b:var(--spy);animation-delay:.34s}
+.m-arena .m-art svg:nth-child(1){color:var(--saffron)}
+.m-arena .m-art svg:nth-child(2){color:var(--coral)}
+.m-arena .m-art svg:nth-child(3){color:var(--mint)}
+
+/* مافيا */
+.m-mafia{--a:#E5383B;--b:#8F1D2C;animation-delay:.42s}
+
+/* ألعاب الثنائي الجديدة */
+.m-imp{--a:#FF4D4D;--b:#FF6B8B;animation-delay:.2s}
+.m-know{--a:#FF6B8B;--b:#9F91F6;animation-delay:.26s}
+.m-art .emo-art{position:absolute;display:grid;place-items:center;width:52px;height:52px;border-radius:17px;background:var(--surface);box-shadow:0 10px 20px -12px var(--shadow),inset 0 0 0 1px var(--line);font-size:1.5rem;line-height:1;animation:float 5s ease-in-out infinite}
+.m-art .emo-art:nth-child(1){top:0;right:0;width:60px;height:60px;font-size:1.8rem}
+.m-art .emo-art:nth-child(2){bottom:0;right:30px;animation-delay:-1.6s}
+.m-art .emo-art:nth-child(3){top:20px;left:-4px;width:44px;height:44px;font-size:1.2rem;animation-delay:-3.2s}

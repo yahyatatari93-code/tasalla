@@ -1,0 +1,95 @@
+/* VOICE: سهرة ثنائي، دافية ومرحة ومستعجلة. IDEA: العد «٣، ٢، ١» واليدين المرفوعة. PICTURE: الرقم الكبير والأصابع.
+   COLOUR/TYPE: ليلي دافي، زهري مرجاني للأول، بنفسجي للتاني، ذهبي للتطابق. Alexandria للأرقام والعناوين، Readex Pro للنص.
+   LAYOUT: شاشة وحدة بالنص، الموبايل محطوط عالطاولة، كل شي كبير وبينقرا من بعيد. */
+:root{color-scheme:dark;--bg:#120B1A;--s1:#1E1428;--s2:#2A1C38;--line:#3A2A4C;--ink:#FFF4F8;--mut:#B9A6C8;
+  --a:#FF6B8B;--b:#9F91F6;--gold:#FFC24A;--ok:#2BD3A6;--no:#FF5A5F;
+  --disp:"Alexandria",system-ui,sans-serif;--body:"Readex Pro",system-ui,sans-serif}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(80% 50% at 20% -10%,rgba(255,107,139,.22),transparent 60%),radial-gradient(70% 45% at 90% 110%,rgba(159,145,246,.18),transparent 65%),var(--bg);color:var(--ink);font:16px/1.6 var(--body);overflow-x:clip}
+#app{max-width:560px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;gap:14px;padding:16px max(16px,env(safe-area-inset-right)) 22px max(16px,env(safe-area-inset-left))}
+button,input{font:inherit;color:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+h1,h2,h3{font-family:var(--disp);margin:0;line-height:1.15;text-wrap:balance}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.brand{font-family:var(--disp);font-weight:800;display:flex;gap:8px;align-items:center}
+.brand i{font-style:normal;color:var(--a)}
+.ib{width:40px;height:40px;border-radius:12px;border:0;background:var(--s2);color:var(--mut)}
+.card{background:var(--s1);border-radius:22px;padding:16px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.card h3{font-size:1rem;color:var(--gold);margin-bottom:10px}
+.mut{color:var(--mut)}.small{font-size:.85rem}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;border:0;border-radius:18px;background:var(--s2);font-weight:700;font-size:1.02rem;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45}
+.btn.go{background:linear-gradient(135deg,var(--a),#FF9A6B);color:#2A0E1A;font-family:var(--disp);font-weight:800;font-size:1.15rem;box-shadow:0 14px 34px -14px rgba(255,107,139,.8)}
+.btn.ghost{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line);color:var(--mut)}
+.row{display:flex;gap:8px}.row>*{flex:1}
+
+/* الإعداد */
+.hero{display:flex;flex-direction:column;gap:8px;padding-top:8px}
+.hero h1{font-size:clamp(2.2rem,10vw,3.1rem);font-weight:800}
+.hero h1 em{font-style:normal;background:linear-gradient(100deg,var(--a),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--mut)}
+.pl{display:flex;flex-direction:column;gap:8px}
+.pi{display:flex;align-items:center;gap:8px;background:var(--s2);border-radius:16px;padding:6px 8px;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--c) 55%,transparent)}
+.pi .dot{width:14px;height:14px;border-radius:50%;background:var(--c);flex:none;margin-inline-start:6px}
+.pi input{flex:1;background:none;border:0;outline:0;padding:10px 4px;font-size:16px;font-weight:700}
+.gsel{display:flex;gap:4px;background:var(--bg);border-radius:12px;padding:3px}
+.gsel button{border:0;background:transparent;border-radius:9px;padding:6px 10px;font-size:.82rem;font-weight:700;color:var(--mut)}
+.gsel button.on{background:var(--c);color:#1B0F22}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;border:0;border-radius:14px;padding:10px;background:var(--s2);font-weight:700;box-shadow:inset 0 0 0 1.5px var(--line)}
+.seg button.on{background:color-mix(in srgb,var(--gold) 18%,var(--s2));box-shadow:inset 0 0 0 2px var(--gold)}
+.seg small{display:block;font-weight:500;font-size:.72rem;color:var(--mut)}
+.how{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.how li{display:flex;gap:10px;align-items:flex-start;font-size:.92rem}
+.how li b{flex:none;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--s2);font-size:1.1rem}
+
+/* اللعب */
+.hud{display:flex;align-items:center;gap:8px}
+.sc{flex:1;display:flex;align-items:center;gap:8px;background:var(--s1);border-radius:14px;padding:8px 12px}
+.sc b{font-family:var(--disp);font-size:1.4rem;color:var(--gold);font-variant-numeric:tabular-nums}
+.sc span{color:var(--mut);font-size:.8rem}
+.streak{font-family:var(--disp);font-weight:800;color:#FF9A6B;background:rgba(255,154,107,.14);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.bar{height:6px;border-radius:99px;background:var(--s2);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--gold));transition:width .4s}
+.qcard{position:relative;display:flex;flex-direction:column;gap:12px;border-radius:26px;padding:18px;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 16%,var(--s1)),var(--s1) 70%);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c) 40%,transparent);animation:rise .45s cubic-bezier(.2,1.3,.4,1)}
+@keyframes rise{from{opacity:0;transform:translateY(16px) scale(.98)}}
+.kind{align-self:flex-start;font-size:.8rem;font-weight:700;border-radius:999px;padding:4px 12px;background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c)}
+.qcard h2{font-size:clamp(1.45rem,6vw,2rem)}
+.who{font-size:.9rem;color:var(--mut);margin:0}
+.who b{color:var(--ink)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.op{display:flex;align-items:center;gap:10px;background:var(--s2);border-radius:16px;padding:10px 12px;font-weight:700;font-size:1rem}
+.op .n{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--bg);font-family:var(--disp);font-weight:800;font-size:1.4rem;color:var(--gold)}
+.op .n small{display:block;font-size:.6rem;color:var(--mut);font-weight:600;line-height:1}
+.pt{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pt div{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px;border-radius:16px;background:var(--s2);font-weight:800;font-family:var(--disp);font-size:1.2rem}
+.pt div span{font-size:2rem}
+
+/* العد */
+.count{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;min-height:52vh}
+.big{font-family:var(--disp);font-weight:800;font-size:clamp(7rem,40vw,12rem);line-height:1;color:var(--gold);text-shadow:0 0 50px rgba(255,194,74,.5);animation:pop .9s ease-out both}
+.big.now{font-size:clamp(3.2rem,16vw,5.5rem);color:var(--a);text-shadow:0 0 50px rgba(255,107,139,.6)}
+@keyframes pop{0%{transform:scale(2.2);opacity:0}25%{transform:scale(1);opacity:1}80%{opacity:1}100%{opacity:.15;transform:scale(.85)}}
+.count p{margin:0;color:var(--mut)}
+.judge{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.judge button{min-height:96px;border:0;border-radius:22px;font-family:var(--disp);font-weight:800;font-size:1.3rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.judge button span{font-size:2rem;line-height:1}
+.judge .y{background:var(--ok);color:#07261D}.judge .n{background:var(--no);color:#fff}
+.react{position:fixed;inset:0;z-index:30;display:grid;place-items:center;pointer-events:none}
+.react div{font-family:var(--disp);font-weight:800;font-size:clamp(2.4rem,12vw,4rem);text-align:center;animation:boom .9s cubic-bezier(.2,1.4,.4,1) both;text-shadow:0 10px 40px rgba(0,0,0,.6)}
+.react small{display:block;font-size:.4em;color:var(--ink)}
+@keyframes boom{0%{transform:scale(.3);opacity:0}30%{transform:scale(1.1);opacity:1}80%{opacity:1}100%{transform:scale(1);opacity:0}}
+
+/* النهاية */
+.res{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:22px 16px;border-radius:28px;background:radial-gradient(90% 60% at 50% 0%,rgba(255,107,139,.28),transparent 70%),var(--s1);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.07)}
+.names{font-family:var(--disp);font-weight:800;font-size:1.3rem}
+.names i{font-style:normal;color:var(--a)}
+.ringp{--p:0;width:190px;height:190px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--a),var(--gold) calc(var(--p)*1%),var(--s2) 0);position:relative}
+.ringp::before{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--s1)}
+.ringp b{position:relative;font-family:var(--disp);font-size:3.2rem;font-weight:800}
+.title{font-family:var(--disp);font-weight:800;font-size:1.6rem;color:var(--gold)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.facts div{background:var(--s2);border-radius:14px;padding:10px;font-size:.85rem}
+.facts b{display:block;font-family:var(--disp);font-size:1.2rem;color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
