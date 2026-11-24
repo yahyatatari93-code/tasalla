@@ -1,8 +1,8 @@
 {
   "name": "tasalla-go",
-  "version": "2.8.0",
+  "version": "3.4.0",
   "private": true,
-  "description": "تسلّى غو: ألعاب سهرات وحكي للشلة والثنائي",
+  "description": "تسلّى غو: ألعاب سهرات وحكي للشلة والثنائي والفرق والمافيا",
   "scripts": {
     "android:add": "cap add android",
     "android:assets": "capacitor-assets generate --android",
